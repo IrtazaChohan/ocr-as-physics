@@ -1,0 +1,82 @@
+{
+  "info": "Use this file to manage all topics in bulk. You can use relative paths or full https links.",
+  "topics": [
+    {
+      "id": "m2-foundations",
+      "module": "Module 2 - Foundations of physics",
+      "title": "Foundations of Physics",
+      "tq": "Topic Questions/Module 2 -Foundations of physics/AS_and_A_Level_Physics_A_Foundations_of_Physics-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 2 -Foundations of physics/AS_and_A_Level_Physics_A_Foundations_of_Physics-MS.pdf.pdf"
+    },
+    {
+      "id": "m3-forces",
+      "module": "Module 3 - Forces and Motion",
+      "title": "Forces in action",
+      "tq": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Forces_in_action-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Forces_in_action-MS.pdf.pdf"
+    },
+    {
+      "id": "m3-materials",
+      "module": "Module 3 - Forces and Motion",
+      "title": "Materials",
+      "tq": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Materials-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Materials-MS.pdf.pdf"
+    },
+    {
+      "id": "m3-motions",
+      "module": "Module 3 - Forces and Motion",
+      "title": "Motions",
+      "tq": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Motions-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Motions-MS.pdf.pdf"
+    },
+    {
+      "id": "m3-newton",
+      "module": "Module 3 - Forces and Motion",
+      "title": "Newton's laws of motion",
+      "tq": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Newtons_laws_of_motions-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Newtons_laws_of_motions-MS.pdf.pdf"
+    },
+    {
+      "id": "m3-work",
+      "module": "Module 3 - Forces and Motion",
+      "title": "Work, energy and power",
+      "tq": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Work_energy_and_power-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 3 - Forces and Motion/AS_and_A_Level_Physics_A_Work_energy_and_power-MS.pdf.pdf"
+    },
+    {
+      "id": "m4-charge",
+      "module": "Module 4 - Electrons, waves and photons",
+      "title": "Charge and current",
+      "tq": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Charge_and_current-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Charge_and_current-MS.pdf.pdf"
+    },
+    {
+      "id": "m4-circuits",
+      "module": "Module 4 - Electrons, waves and photons",
+      "title": "Electrical circuits",
+      "tq": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Electrical_circuits-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Electrical_circuits-MS.pdf.pdf"
+    },
+    {
+      "id": "m4-energy",
+      "module": "Module 4 - Electrons, waves and photons",
+      "title": "Energy, power and resistance",
+      "tq": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Energy_power_and_resistance-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Energy_power_and_resistance-MS.pdf.pdf"
+    },
+    {
+      "id": "m4-quantum",
+      "module": "Module 4 - Electrons, waves and photons",
+      "title": "Quantum physics",
+      "tq": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Quantum_physics-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Quantum_physics-MS.pdf.pdf"
+    },
+    {
+      "id": "m4-waves",
+      "module": "Module 4 - Electrons, waves and photons",
+      "title": "Waves",
+      "tq": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Waves-TQ.pdf.pdf",
+      "ms": "Topic Questions/Module 4 - Electrons, waves and photons/AS_and_A_Level_Physics_A_Waves-MS.pdf.pdf"
+    }
+  ]
+}

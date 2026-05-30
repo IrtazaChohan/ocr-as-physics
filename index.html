@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OCR AS Physics - Topic Questions + Progress Tracker</title>
+  <style>
+    :root {
+      --bg: #f3f6ef;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #536179;
+      --brand: #0b4f6c;
+      --brand-2: #1792a4;
+      --accent: #f4cf5b;
+      --ok: #2e8b57;
+      --border: #d8e0eb;
+      --soft: #f8fbff;
+      --shadow: 0 10px 26px rgba(20, 30, 45, 0.08);
+      --radius: 16px;
+      --hero-text: #ffffff;
+      --hero-sub: #e8fffd;
+      --hero-stat: rgba(255, 255, 255, 0.14);
+      --hero-stat-border: rgba(255, 255, 255, 0.3);
+      --hero-overlay: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      --graph-bg: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+      --grid-line: #dce5f0;
+      --chip: #edf4ff;
+      --chip-text: #21436b;
+      --chip-border: #c8d8ef;
+      --topic-title: #d0102a;
+      --topic-title-bg: #ffe7ec;
+      --topic-title-border: #ffb7c4;
+    }
+
+    body[data-theme="dark"] {
+      --bg: #101824;
+      --panel: #162233;
+      --text: #e7edf8;
+      --muted: #b6c4da;
+      --brand: #0f3f58;
+      --brand-2: #1c6c80;
+      --accent: #ffd166;
+      --ok: #3ebd7a;
+      --border: #304258;
+      --soft: #1b2a3d;
+      --shadow: 0 14px 30px rgba(3, 8, 14, 0.35);
+      --hero-text: #f2f8ff;
+      --hero-sub: #d7e8ff;
+      --hero-stat: rgba(14, 26, 40, 0.35);
+      --hero-stat-border: rgba(179, 203, 230, 0.25);
+      --hero-overlay: linear-gradient(135deg, #11324a 0%, #0c4f63 100%);
+      --graph-bg: linear-gradient(180deg, #172638 0%, #132031 100%);
+      --grid-line: #314155;
+      --chip: #203149;
+      --chip-text: #d7e8ff;
+      --chip-border: #395276;
+      --topic-title: #ff6f86;
+      --topic-title-bg: #4a1f2a;
+      --topic-title-border: #7d2d43;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(216, 243, 220, 0.7) 0, transparent 33%),
+        radial-gradient(circle at 95% 100%, rgba(255, 232, 204, 0.7) 0, transparent 30%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 24px 16px 36px;
+    }
+
+    .hero {
+      background: var(--hero-overlay);
+      color: var(--hero-text);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+      font-size: clamp(1.5rem, 1rem + 1.8vw, 2.2rem);
+      letter-spacing: 0.35px;
+    }
+
+    .hero-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero.collapsed .sub,
+    .hero.collapsed .encourage-box,
+    .hero.collapsed .stats,
+    .hero.collapsed .top-tools {
+      display: none;
+    }
+
+    .hero .sub {
+      margin-top: 8px;
+      color: var(--hero-sub);
+      line-height: 1.5;
+      font-size: 1rem;
+      max-width: 800px;
+    }
+
+    .encourage-box {
+      margin-top: 12px;
+      border: 1px solid var(--hero-stat-border);
+      border-radius: 12px;
+      background: var(--hero-stat);
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .encourage-text {
+      font-weight: 700;
+      color: var(--hero-text);
+      line-height: 1.4;
+    }
+
+    .stats {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      border: 1px solid var(--hero-stat-border);
+      border-radius: 12px;
+      background: var(--hero-stat);
+      padding: 8px 10px;
+    }
+
+    .stat .k {
+      font-size: 1.16rem;
+      font-weight: 800;
+      color: var(--hero-text);
+    }
+
+    .stat .l {
+      font-size: 0.8rem;
+      color: var(--hero-sub);
+    }
+
+    .top-tools {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: var(--chip);
+      color: var(--chip-text);
+      border-color: var(--chip-border);
+    }
+
+    .btn:hover,
+    .btn:focus {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn.tq {
+      background: #e6f7f8;
+      color: #0d5c63;
+      border-color: #b5e5e8;
+    }
+
+    .btn.ms {
+      background: #fff6db;
+      color: #7a5b00;
+      border-color: #f4d35e;
+    }
+
+    body[data-theme="dark"] .btn.tq {
+      background: #1d3d4a;
+      border-color: #2b5868;
+      color: #a9f2ff;
+    }
+
+    body[data-theme="dark"] .btn.ms {
+      background: #3d341e;
+      border-color: #665423;
+      color: #ffe29c;
+    }
+
+    .btn.warn {
+      background: #fff0ec;
+      color: #7a2f1e;
+      border-color: #f1c9bf;
+    }
+
+    body[data-theme="dark"] .btn.warn {
+      background: #452521;
+      color: #ffd0c6;
+      border-color: #73423b;
+    }
+
+    .section {
+      margin-top: 18px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--text);
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+      letter-spacing: 0.2px;
+    }
+
+    .section .meta {
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .module {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .module-head {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--soft);
+    }
+
+    .module h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--text);
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .items {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: var(--panel);
+    }
+
+    .title {
+      font-size: 1rem;
+      line-height: 1.35;
+      margin-bottom: 8px;
+      color: var(--topic-title);
+      font-weight: 800;
+      padding: 6px 8px;
+      border-radius: 9px;
+      background: linear-gradient(90deg, var(--topic-title-bg), transparent 92%);
+      border: 1px solid var(--topic-title-border);
+      letter-spacing: 0.15px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .tracker {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: var(--soft);
+      display: grid;
+      gap: 8px;
+    }
+
+    .mini-head {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    label {
+      display: grid;
+      gap: 4px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px;
+      font: inherit;
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 58px;
+      resize: vertical;
+    }
+
+    .tool-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .progress-bar {
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: color-mix(in srgb, var(--border) 75%, var(--panel) 25%);
+    }
+
+    .progress-bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #2e8b57, #66b032);
+      width: 0;
+      transition: width 0.25s ease;
+    }
+
+    .attempt-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .attempt {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 7px 8px;
+      font-size: 0.84rem;
+      color: var(--text);
+    }
+
+    .attempt-text {
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
+    .attempt button {
+      border: 1px solid #efc5bc;
+      color: #8b3c2c;
+      background: #fff4f1;
+      border-radius: 999px;
+      padding: 4px 9px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .help {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    svg {
+      width: 100%;
+      height: 240px;
+      border-radius: 12px;
+      background: var(--graph-bg);
+      border: 1px solid var(--border);
+    }
+
+    .relax-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 14px;
+    }
+
+    .relax-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .relax-card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .quiz-result {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .quiz-fact {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--soft);
+      padding: 8px;
+      font-size: 0.86rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .flag-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--soft);
+      padding: 8px;
+      display: grid;
+      place-items: center;
+    }
+
+    .flag-wrap img {
+      width: min(100%, 280px);
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: #fff;
+    }
+
+    .mystery-title {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text);
+      font-weight: 800;
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    }
+
+    .mystery-body {
+      line-height: 1.5;
+      color: var(--text);
+      font-size: 0.93rem;
+      white-space: pre-line;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 14, 24, 0.6);
+      display: grid;
+      place-items: center;
+      z-index: 50;
+      padding: 12px;
+    }
+
+    .modal[hidden] {
+      display: none;
+    }
+
+    .modal-card {
+      width: min(920px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--text);
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    }
+
+    .foot {
+      margin-top: 18px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 680px) {
+      .wrap {
+        padding: 12px 10px 26px;
+      }
+
+      .hero {
+        position: static;
+        border-radius: 14px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .tool-row .btn,
+      .top-tools .btn {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-head">
+        <h1>OCR AS Physics - Study Home</h1>
+        <button class="btn" id="toggleHeroBtn" type="button">Collapse top bar</button>
+      </div>
+      <p class="sub">Open PDFs, track repeated attempts, save notes, and watch progress by topic, module, and overall trend.</p>
+
+      <div class="encourage-box">
+        <div class="encourage-text" id="encouragementText">You got this Adam - small steps, big wins.</div>
+        <button class="btn" id="nextEncouragementBtn" type="button">New boost</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="k" id="statTopicsDone">0 / 0</div>
+          <div class="l">Topics attempted</div>
+        </div>
+        <div class="stat">
+          <div class="k" id="statOverall">0%</div>
+          <div class="l">Overall latest average</div>
+        </div>
+        <div class="stat">
+          <div class="k" id="statAttempts">0</div>
+          <div class="l">Total attempts logged</div>
+        </div>
+        <div class="stat">
+          <div class="k" id="statNextDue">None</div>
+          <div class="l">Next due date</div>
+        </div>
+      </div>
+
+      <div class="top-tools">
+        <button class="btn" id="themeToggleBtn" type="button">Switch to dark theme</button>
+        <button class="btn" id="exportBtn" type="button">Export progress</button>
+        <label class="btn" for="importFile">Import progress</label>
+        <input id="importFile" type="file" accept="application/json" style="display:none" />
+        <button class="btn" id="exportTopicsBtn" type="button">Export topics template</button>
+        <label class="btn" for="importTopicsFile">Import topics file</label>
+        <input id="importTopicsFile" type="file" accept="application/json" style="display:none" />
+        <button class="btn warn" id="clearBtn" type="button">Reset all progress</button>
+      </div>
+    </section>
+
+    <section class="section" id="jsBlockedNotice">
+      <h2>Open Mode Notice</h2>
+      <div class="meta">If this message stays visible, OneDrive preview is blocking JavaScript. Use Open > Open in browser from OneDrive, or host this file on a normal website URL.</div>
+      <div class="meta">For iPad reliability, use full HTTP links for PDFs (OneDrive share links) instead of local relative links.</div>
+    </section>
+
+    <section class="section">
+      <h2>Overall Improvement Graph</h2>
+      <div class="meta" id="chartMeta">Log attempts to see your score trend over time.</div>
+      <svg id="progressChart" viewBox="0 0 900 240" role="img" aria-label="Overall score trend graph"></svg>
+      <div class="help">Tip: each topic and each module also has its own graph button.</div>
+    </section>
+
+    <section class="grid" id="moduleGrid"></section>
+
+    <section class="relax-grid">
+      <article class="relax-card">
+        <h3>Premier League Mini Quiz</h3>
+        <div class="help" id="quizCountInfo"></div>
+        <div id="quizQuestion">Loading quiz...</div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-result" id="quizResult"></div>
+        <div class="quiz-fact" id="quizFact">Answer to unlock a stat insight.</div>
+        <div class="help" id="quizStats"></div>
+        <div class="tool-row">
+          <button class="btn" id="nextQuizBtn" type="button">Next question</button>
+          <button class="btn warn" id="resetQuizBtn" type="button">Reset football quiz</button>
+        </div>
+      </article>
+
+      <article class="relax-card">
+        <h3>World Geography Challenge</h3>
+        <div class="help" id="geoCountInfo"></div>
+        <div class="flag-wrap" id="geoFlagWrap" hidden>
+          <img id="geoFlagImage" alt="Country flag" loading="lazy" />
+        </div>
+        <div id="geoQuestion">Loading geography question...</div>
+        <div class="quiz-options" id="geoOptions"></div>
+        <div class="quiz-result" id="geoResult"></div>
+        <div class="quiz-fact" id="geoFact">Answer to unlock a world fact.</div>
+        <div class="help" id="geoStats"></div>
+        <button class="btn" id="nextGeoBtn" type="button">Next geography question</button>
+      </article>
+
+      <article class="relax-card">
+        <h3>Real-Life Mystery Stories</h3>
+        <h4 class="mystery-title" id="mysteryTitle">Loading...</h4>
+        <div class="mystery-body" id="mysteryText">Loading...</div>
+        <button class="btn" id="nextMysteryBtn" type="button">Next mystery</button>
+      </article>
+    </section>
+
+    <p class="foot">Progress is saved in local browser storage on each device. Use Export/Import to sync across iPad, iPhone, Android, and PC.</p>
+    <p class="foot">Mobile tip: if a PDF does not open from the OneDrive app, use Open in browser first, then tap the link again.</p>
+  </main>
+
+  <div class="modal" id="chartModal" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h4 class="modal-title" id="chartModalTitle">Chart</h4>
+        <button class="btn" id="closeChartModalBtn" type="button">Close</button>
+      </div>
+      <div class="meta" id="chartModalMeta">No data yet.</div>
+      <svg id="chartModalSvg" viewBox="0 0 900 240" role="img" aria-label="Detail graph"></svg>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "ocr_as_physics_tracker_v3";
+    const LINK_BASE_URL = "";
+    const TOPICS_DATA_URL = "topics-data.json";
+    const FOOTBALL_QUIZ_VERSION = "football-5000-v2-elite";
+    const FOOTBALL_TARGET_QUESTIONS = 5200;
+
+    function toOpenUrl(pathOrUrl) {
+      if (!pathOrUrl) {
+        return "#";
+      }
+      if (/^https?:\/\//i.test(pathOrUrl)) {
+        return pathOrUrl;
+      }
+      const normalizedPath = encodeURI(String(pathOrUrl).replace(/\\/g, "/"));
+      const base = String(LINK_BASE_URL || "").trim();
+      if (!base) {
+        return normalizedPath;
+      }
+      return base.replace(/\/+$/, "") + "/" + normalizedPath.replace(/^\/+/, "");
+    }
+
+    const DEFAULT_TOPICS = [
+      { id: "m2-foundations", module: "Module 2 - Foundations of physics", title: "Foundations of Physics", tq: "Topic%20Questions/Module%202%20-Foundations%20of%20physics/AS_and_A_Level_Physics_A_Foundations_of_Physics-TQ.pdf.pdf", ms: "Topic%20Questions/Module%202%20-Foundations%20of%20physics/AS_and_A_Level_Physics_A_Foundations_of_Physics-MS.pdf.pdf" },
+      { id: "m3-forces", module: "Module 3 - Forces and Motion", title: "Forces in action", tq: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Forces_in_action-TQ.pdf.pdf", ms: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Forces_in_action-MS.pdf.pdf" },
+      { id: "m3-materials", module: "Module 3 - Forces and Motion", title: "Materials", tq: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Materials-TQ.pdf.pdf", ms: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Materials-MS.pdf.pdf" },
+      { id: "m3-motions", module: "Module 3 - Forces and Motion", title: "Motions", tq: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Motions-TQ.pdf.pdf", ms: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Motions-MS.pdf.pdf" },
+      { id: "m3-newton", module: "Module 3 - Forces and Motion", title: "Newton's laws of motion", tq: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Newtons_laws_of_motions-TQ.pdf.pdf", ms: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Newtons_laws_of_motions-MS.pdf.pdf" },
+      { id: "m3-work", module: "Module 3 - Forces and Motion", title: "Work, energy and power", tq: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Work_energy_and_power-TQ.pdf.pdf", ms: "Topic%20Questions/Module%203%20-%20Forces%20and%20Motion/AS_and_A_Level_Physics_A_Work_energy_and_power-MS.pdf.pdf" },
+      { id: "m4-charge", module: "Module 4 - Electrons, waves and photons", title: "Charge and current", tq: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Charge_and_current-TQ.pdf.pdf", ms: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Charge_and_current-MS.pdf.pdf" },
+      { id: "m4-circuits", module: "Module 4 - Electrons, waves and photons", title: "Electrical circuits", tq: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Electrical_circuits-TQ.pdf.pdf", ms: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Electrical_circuits-MS.pdf.pdf" },
+      { id: "m4-energy", module: "Module 4 - Electrons, waves and photons", title: "Energy, power and resistance", tq: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Energy_power_and_resistance-TQ.pdf.pdf", ms: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Energy_power_and_resistance-MS.pdf.pdf" },
+      { id: "m4-quantum", module: "Module 4 - Electrons, waves and photons", title: "Quantum physics", tq: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Quantum_physics-TQ.pdf.pdf", ms: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Quantum_physics-MS.pdf.pdf" },
+      { id: "m4-waves", module: "Module 4 - Electrons, waves and photons", title: "Waves", tq: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Waves-TQ.pdf.pdf", ms: "Topic%20Questions/Module%204%20-%20Electrons,%20waves%20and%20photons/AS_and_A_Level_Physics_A_Waves-MS.pdf.pdf" }
+    ];
+
+    let topics = DEFAULT_TOPICS.slice();
+
+    function normalizeTopicsList(raw) {
+      if (!Array.isArray(raw)) {
+        return [];
+      }
+      const out = [];
+      raw.forEach((t, idx) => {
+        if (!t || typeof t !== "object") {
+          return;
+        }
+        const normalized = {
+          id: String(t.id || "").trim() || "topic-" + (idx + 1),
+          module: String(t.module || "General").trim() || "General",
+          title: String(t.title || "Untitled topic").trim() || "Untitled topic",
+          tq: String(t.tq || "").trim(),
+          ms: String(t.ms || "").trim()
+        };
+        if (!normalized.tq || !normalized.ms) {
+          return;
+        }
+        out.push(normalized);
+      });
+      return uniqBy(out, (t) => t.id);
+    }
+
+    async function loadTopicsData() {
+      try {
+        const response = await fetch(TOPICS_DATA_URL, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("topics-data not found");
+        }
+        const payload = await response.json();
+        const source = Array.isArray(payload) ? payload : payload && payload.topics;
+        const normalized = normalizeTopicsList(source);
+        if (normalized.length) {
+          topics = normalized;
+          return;
+        }
+      } catch (err) {
+        // Keep default inline topics when external file is unavailable.
+      }
+      topics = DEFAULT_TOPICS.slice();
+    }
+
+    function handleExportTopicsTemplate() {
+      const payload = {
+        info: "Add or edit topics here, then import this file or keep it as topics-data.json for auto-load.",
+        topics: topics.map((t) => ({ id: t.id, module: t.module, title: t.title, tq: t.tq, ms: t.ms }))
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "topics-data.template.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function handleImportTopicsFile(file) {
+      if (!file) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const payload = JSON.parse(String(reader.result || "{}"));
+          const source = Array.isArray(payload) ? payload : payload && payload.topics;
+          const normalized = normalizeTopicsList(source);
+          if (!normalized.length) {
+            alert("No valid topics found in that file.");
+            return;
+          }
+          topics = normalized;
+          renderModules();
+          refreshSummaryAndChart();
+          alert("Topics file imported.");
+        } catch (err) {
+          alert("Could not import topics file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    const mysteryStories = [
+      { title: "The Wow! Signal (1977)", details: "On 15 August 1977, astronomer Jerry Ehman found a very strong narrowband radio signal in Big Ear telescope data.\n\nIt lasted 72 seconds, matched what a non-Earth source could look like, and was never repeated in exactly the same form.\n\nBecause repeatability is central in science, this one-time event remains unresolved, not proven extraterrestrial, and still heavily studied." },
+      { title: "The Mary Celeste (1872)", details: "The ship Mary Celeste was discovered drifting with no crew aboard.\n\nCargo and supplies were largely intact, the ship was still seaworthy, and there was no clear violent damage.\n\nThe strongest ideas involve weather panic, navigation error, or emergency abandonment, but no final explanation is universally accepted." },
+      { title: "Dyatlov Pass (1959)", details: "Nine hikers died in harsh winter conditions in the Ural Mountains.\n\nTheir tent appeared cut from inside, and evidence suggested sudden departure into extreme cold.\n\nModern studies favor a combination of snow movement, terrain risk, and weather stress, but mystery remains due to fragmented records and unusual injuries." },
+      { title: "The Taos Hum", details: "Some people around Taos report a persistent low hum while others hear nothing.\n\nThe mismatch between listeners makes this case fascinating in acoustics, perception, and low-frequency vibration research.\n\nNo single measured source explains every report, keeping it open as a modern environmental mystery." },
+      { title: "Tunguska (1908)", details: "A huge explosion flattened vast Siberian forest without a classical impact crater.\n\nThe leading model is an airburst from a meteoroid/comet fragment that exploded before ground impact.\n\nScientists still analyze it to improve planetary defense models for future near-Earth object risks." },
+      { title: "Hessdalen Lights", details: "Norway's Hessdalen valley has recurring unexplained lights with repeated observations over years.\n\nUnlike many myths, this case has instrument campaigns and data collection attempts.\n\nSeveral geophysical and atmospheric mechanisms are proposed, yet no complete model fits all recorded behavior." }
+    ];
+
+    const encouragementBank = buildEncouragementBank();
+    const footballQuizBank = buildFootballQuizBank();
+    const geoQuizBank = buildGeographyQuizBank();
+
+    let state = loadState();
+
+    function buildEncouragementBank() {
+      const starts = ["You got this Adam", "Stay sharp Adam", "Calm confidence Adam", "Level up mode Adam", "Keep building Adam", "One smart step Adam", "Focus and finish Adam", "Brilliant effort Adam"];
+      const middles = [
+        "precision beats panic",
+        "consistency compounds",
+        "hard questions build real power",
+        "every attempt teaches something",
+        "clarity comes from repetition",
+        "discipline gives confidence",
+        "deep work wins",
+        "patience is strength",
+        "start with Bismillah and strong intention",
+        "gratitude and effort go together"
+      ];
+      const ends = ["keep going", "finish strong", "this set is yours", "lock in", "one page at a time", "you are ready", "steady and sharp", "make this attempt count"];
+      const out = [];
+      for (let i = 0; i < starts.length; i += 1) {
+        for (let j = 0; j < middles.length; j += 1) {
+          for (let k = 0; k < ends.length; k += 1) {
+            out.push(starts[i] + " - " + middles[j] + " - " + ends[k] + ".");
+          }
+        }
+      }
+      return out;
+    }
+
+    function defaultState() {
+      return {
+        topics: {},
+        settings: { theme: "light", encouragementIndex: 0, mysteryIndex: 0, heroCollapsed: false },
+        quiz: { answered: 0, correct: 0, streak: 0, bestStreak: 0, lastQuestionId: null, version: FOOTBALL_QUIZ_VERSION },
+        geo: { answered: 0, correct: 0, streak: 0, bestStreak: 0, lastQuestionId: null }
+      };
+    }
+
+    function mergeState(base, incoming) {
+      const out = JSON.parse(JSON.stringify(base));
+      if (!incoming || typeof incoming !== "object") {
+        return out;
+      }
+      if (incoming.topics && typeof incoming.topics === "object") {
+        out.topics = incoming.topics;
+      }
+      if (incoming.settings && typeof incoming.settings === "object") {
+        out.settings = { ...out.settings, ...incoming.settings };
+      }
+      if (incoming.quiz && typeof incoming.quiz === "object") {
+        out.quiz = { ...out.quiz, ...incoming.quiz };
+      }
+      if (incoming.geo && typeof incoming.geo === "object") {
+        out.geo = { ...out.geo, ...incoming.geo };
+      }
+      return out;
+    }
+
+    function loadState() {
+      try {
+        const base = defaultState();
+        const v3 = localStorage.getItem(STORAGE_KEY);
+        if (v3) {
+          return mergeState(base, JSON.parse(v3));
+        }
+        const v2 = localStorage.getItem("ocr_as_physics_tracker_v2");
+        if (v2) {
+          return mergeState(base, JSON.parse(v2));
+        }
+        const v1 = localStorage.getItem("ocr_as_physics_tracker_v1");
+        if (v1) {
+          const legacy = JSON.parse(v1);
+          if (legacy && typeof legacy === "object" && legacy.topics) {
+            base.topics = legacy.topics;
+          }
+        }
+        return base;
+      } catch (err) {
+        return defaultState();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getTopicState(topicId) {
+      if (!state.topics[topicId]) {
+        state.topics[topicId] = { dueDate: "", notes: "", attempts: [] };
+      }
+      if (!Array.isArray(state.topics[topicId].attempts)) {
+        state.topics[topicId].attempts = [];
+      }
+      if (typeof state.topics[topicId].notes !== "string") {
+        state.topics[topicId].notes = "";
+      }
+      if (typeof state.topics[topicId].dueDate !== "string") {
+        state.topics[topicId].dueDate = "";
+      }
+      return state.topics[topicId];
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) {
+        return "No date";
+      }
+      const dt = new Date(dateStr + "T00:00:00");
+      if (Number.isNaN(dt.getTime())) {
+        return dateStr;
+      }
+      return dt.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" });
+    }
+
+    function uniqBy(arr, keyFn) {
+      const seen = new Set();
+      const out = [];
+      arr.forEach((x) => {
+        const k = keyFn(x);
+        if (!seen.has(k)) {
+          seen.add(k);
+          out.push(x);
+        }
+      });
+      return out;
+    }
+
+    function makeOptions(correct, pool, seed) {
+      const opts = [String(correct)];
+      let i = 0;
+      while (opts.length < 4 && i < pool.length * 2) {
+        const cand = String(pool[(seed + i * 7) % pool.length]);
+        if (cand !== String(correct) && !opts.includes(cand)) {
+          opts.push(cand);
+        }
+        i += 1;
+      }
+      while (opts.length < 4) {
+        opts.push("Not sure");
+      }
+      const rot = seed % opts.length;
+      return opts.slice(rot).concat(opts.slice(0, rot));
+    }
+
+    function buildFootballQuizBank() {
+      const pl = [
+        { season: "2018/19", champion: "Manchester City", points: 98, runner: "Liverpool", runnerPoints: 97, goldenBoot: "Mohamed Salah", goldenBootGoals: 22, assists: "Eden Hazard", assistCount: 15, cityPos: 1 },
+        { season: "2019/20", champion: "Liverpool", points: 99, runner: "Manchester City", runnerPoints: 81, goldenBoot: "Jamie Vardy", goldenBootGoals: 23, assists: "Kevin De Bruyne", assistCount: 20, cityPos: 2 },
+        { season: "2020/21", champion: "Manchester City", points: 86, runner: "Manchester United", runnerPoints: 74, goldenBoot: "Harry Kane", goldenBootGoals: 23, assists: "Harry Kane", assistCount: 14, cityPos: 1 },
+        { season: "2021/22", champion: "Manchester City", points: 93, runner: "Liverpool", runnerPoints: 92, goldenBoot: "Son Heung-min", goldenBootGoals: 23, assists: "Mohamed Salah", assistCount: 13, cityPos: 1 },
+        { season: "2022/23", champion: "Manchester City", points: 89, runner: "Arsenal", runnerPoints: 84, goldenBoot: "Erling Haaland", goldenBootGoals: 36, assists: "Kevin De Bruyne", assistCount: 16, cityPos: 1 },
+        { season: "2023/24", champion: "Manchester City", points: 91, runner: "Arsenal", runnerPoints: 89, goldenBoot: "Erling Haaland", goldenBootGoals: 27, assists: "Ollie Watkins", assistCount: 13, cityPos: 1 }
+      ];
+
+      const ucl = [
+        { season: "2018/19", winner: "Liverpool", runner: "Tottenham Hotspur", finalScore: "2-0" },
+        { season: "2019/20", winner: "Bayern Munich", runner: "Paris Saint-Germain", finalScore: "1-0" },
+        { season: "2020/21", winner: "Chelsea", runner: "Manchester City", finalScore: "1-0" },
+        { season: "2021/22", winner: "Real Madrid", runner: "Liverpool", finalScore: "1-0" },
+        { season: "2022/23", winner: "Manchester City", runner: "Inter", finalScore: "1-0" },
+        { season: "2023/24", winner: "Real Madrid", runner: "Borussia Dortmund", finalScore: "2-0" }
+      ];
+
+      const fifaPlayers = [
+        { name: "Kylian Mbappe", nation: "France", position: "Center Forward", club: "Paris Saint-Germain" },
+        { name: "Erling Haaland", nation: "Norway", position: "Striker", club: "Manchester City" },
+        { name: "Kevin De Bruyne", nation: "Belgium", position: "Attacking Midfielder", club: "Manchester City" },
+        { name: "Jude Bellingham", nation: "England", position: "Central Midfielder", club: "Real Madrid" },
+        { name: "Vinicius Junior", nation: "Brazil", position: "Left Winger", club: "Real Madrid" },
+        { name: "Mohamed Salah", nation: "Egypt", position: "Right Winger", club: "Liverpool" },
+        { name: "Harry Kane", nation: "England", position: "Striker", club: "Bayern Munich" },
+        { name: "Rodri", nation: "Spain", position: "Defensive Midfielder", club: "Manchester City" },
+        { name: "Bukayo Saka", nation: "England", position: "Right Winger", club: "Arsenal" },
+        { name: "Pedri", nation: "Spain", position: "Central Midfielder", club: "Barcelona" },
+        { name: "Lautaro Martinez", nation: "Argentina", position: "Striker", club: "Inter" },
+        { name: "Antoine Griezmann", nation: "France", position: "Second Striker", club: "Atletico Madrid" },
+        { name: "Robert Lewandowski", nation: "Poland", position: "Striker", club: "Barcelona" },
+        { name: "Bernardo Silva", nation: "Portugal", position: "Attacking Midfielder", club: "Manchester City" },
+        { name: "Bruno Fernandes", nation: "Portugal", position: "Attacking Midfielder", club: "Manchester United" },
+        { name: "Martin Odegaard", nation: "Norway", position: "Attacking Midfielder", club: "Arsenal" },
+        { name: "Ollie Watkins", nation: "England", position: "Striker", club: "Aston Villa" },
+        { name: "Son Heung-min", nation: "South Korea", position: "Left Winger", club: "Tottenham Hotspur" },
+        { name: "Virgil van Dijk", nation: "Netherlands", position: "Center Back", club: "Liverpool" },
+        { name: "Alisson", nation: "Brazil", position: "Goalkeeper", club: "Liverpool" }
+      ];
+
+      const transfers = [
+        { player: "Erling Haaland", from: "Borussia Dortmund", to: "Manchester City" },
+        { player: "Declan Rice", from: "West Ham United", to: "Arsenal" },
+        { player: "Cole Palmer", from: "Manchester City", to: "Chelsea" },
+        { player: "Kai Havertz", from: "Chelsea", to: "Arsenal" },
+        { player: "Dominik Szoboszlai", from: "RB Leipzig", to: "Liverpool" },
+        { player: "Casemiro", from: "Real Madrid", to: "Manchester United" }
+      ];
+
+      const teams = uniqBy(pl.flatMap((s) => [s.champion, s.runner]).concat(["Manchester City", "Liverpool", "Arsenal", "Chelsea", "Manchester United", "Tottenham Hotspur", "Newcastle United", "Real Madrid", "Bayern Munich", "Inter"]), (x) => x);
+      const players = uniqBy(fifaPlayers.map((x) => x.name), (x) => x);
+      const playerNations = uniqBy(fifaPlayers.map((x) => x.nation), (x) => x);
+      const positions = uniqBy(fifaPlayers.map((x) => x.position), (x) => x);
+
+      const quiz = [];
+      const used = new Set();
+      let qId = 1;
+
+      function addQ(q, correct, options, fact, category) {
+        const key = q + "|" + String(correct);
+        if (used.has(key)) {
+          return;
+        }
+        used.add(key);
+        quiz.push({ id: "f-" + qId, q: q, correct: String(correct), options: options.map((x) => String(x)), fact: fact, category: category });
+        qId += 1;
+      }
+
+      pl.forEach((s, i) => {
+        addQ("Who won the Premier League in " + s.season + "?", s.champion, makeOptions(s.champion, teams, i + 1), s.champion + " finished on " + s.points + " points.", "PL Winners");
+        addQ("How many points did the " + s.season + " champions get?", s.points, makeOptions(String(s.points), ["99", "98", "97", "96", "95", "94", "93", "92", "91", "90", "89", "88", "87", "86", "85"], i + 4), "Runner-up was " + s.runner + ".", "PL Points");
+        addQ("Who finished second in " + s.season + "?", s.runner, makeOptions(s.runner, teams, i + 7), "Champions were " + s.champion + ".", "PL Positions");
+        addQ("Golden Boot winner in " + s.season + "?", s.goldenBoot, makeOptions(s.goldenBoot, players, i + 10), "Golden Boot goals: " + s.goldenBootGoals + ".", "PL Scorers");
+        addQ("Top assist provider in " + s.season + "?", s.assists, makeOptions(s.assists, players, i + 14), "Top assists: " + s.assistCount + ".", "PL Assists");
+        addQ("In " + s.season + ", what was the points gap between champions and runners-up?", s.points - s.runnerPoints, makeOptions(String(s.points - s.runnerPoints), ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "18"], i + 16), "" + s.champion + " beat " + s.runner + " by " + (s.points - s.runnerPoints) + " point(s).", "PL Elite Gaps");
+        addQ("In " + s.season + ", how many points did the runners-up finish with?", s.runnerPoints, makeOptions(String(s.runnerPoints), ["97", "92", "89", "84", "81", "74", "90", "88", "86", "83"], i + 18), "Runners-up: " + s.runner + " on " + s.runnerPoints + ".", "PL Elite Points");
+      });
+
+      ucl.forEach((u, i) => {
+        addQ("Who won the UEFA Champions League in " + u.season + "?", u.winner, makeOptions(u.winner, teams, i + 19), "UCL winner for that season: " + u.winner + ".", "Champions League");
+        addQ("Who did " + u.winner + " beat in the " + u.season + " UCL final?", u.runner, makeOptions(u.runner, ucl.map((x) => x.runner), i + 20), "Final score was " + u.finalScore + ".", "Champions League Finals");
+        addQ("What was the UCL final score in " + u.season + " (winner first)?", u.finalScore, makeOptions(u.finalScore, ["1-0", "2-0", "2-1", "3-1", "3-0"], i + 21), "Winner: " + u.winner + ", runner-up: " + u.runner + ".", "Champions League Finals");
+      });
+
+      const eliteFacts = [
+        {
+          q: "Only one club outside Manchester City won the Premier League between 2018/19 and 2023/24. Which club?",
+          a: "Liverpool",
+          pool: teams,
+          fact: "Liverpool's title season in this run was 2019/20.",
+          category: "PL Elite Era"
+        },
+        {
+          q: "Which season in 2018/19-2023/24 had the smallest title-winning margin (champion points minus runner-up points)?",
+          a: "2021/22",
+          pool: pl.map((x) => x.season),
+          fact: "Manchester City finished one point ahead of Liverpool (93 vs 92).",
+          category: "PL Elite Margins"
+        },
+        {
+          q: "Which season had the largest title-winning margin in this set?",
+          a: "2019/20",
+          pool: pl.map((x) => x.season),
+          fact: "Liverpool won by 18 points over Manchester City.",
+          category: "PL Elite Margins"
+        },
+        {
+          q: "In which season did Kevin De Bruyne record 20 assists?",
+          a: "2019/20",
+          pool: pl.map((x) => x.season),
+          fact: "That remains one of the highest PL assist totals.",
+          category: "PL Elite Assists"
+        },
+        {
+          q: "Which season saw Erling Haaland set a 36-goal Golden Boot?",
+          a: "2022/23",
+          pool: pl.map((x) => x.season),
+          fact: "Haaland scored 36 in his first PL season.",
+          category: "PL Elite Scoring"
+        }
+      ];
+
+      eliteFacts.forEach((f, i) => {
+        addQ(f.q, f.a, makeOptions(f.a, f.pool, i + 25), f.fact, f.category);
+      });
+
+      fifaPlayers.forEach((p, i) => {
+        addQ("FIFA profile: nation " + p.nation + ", position " + p.position + ", club " + p.club + ". Who is he?", p.name, makeOptions(p.name, players, i + 23), p.name + " currently represents " + p.nation + ".", "FIFA Players");
+        addQ("Who matches this profile: " + p.position + " for " + p.club + " and " + p.nation + "?", p.name, makeOptions(p.name, players, i + 31), "Player profile answer: " + p.name + ".", "FIFA Players");
+      });
+
+      transfers.forEach((t, i) => {
+        addQ(t.player + " joined which club?", t.to, makeOptions(t.to, teams, i + 41), t.player + " moved from " + t.from + " to " + t.to + ".", "Transfers");
+        addQ(t.player + " signed from which club before joining " + t.to + "?", t.from, makeOptions(t.from, transfers.map((x) => x.from), i + 47), "Transfer detail: " + t.player + " from " + t.from + ".", "Transfers");
+      });
+
+      const opening = [
+        "Match analyst card", "Elite comparison", "High-level football brief", "Scouting desk", "Tactical board", "Data room", "Weekend challenge", "Coach review", "Performance analysis", "Player ID prompt"
+      ];
+      const closings = [
+        "Choose the right answer.", "Who is it?", "Pick the correct option.", "Name the player.", "Answer this one.", "Lock your answer.", "Elite mode question.", "Stay sharp.", "Back your football IQ.", "No guesswork."
+      ];
+
+      let i = 0;
+      let safety = 0;
+      while (quiz.length < FOOTBALL_TARGET_QUESTIONS && safety < FOOTBALL_TARGET_QUESTIONS * 8) {
+        const plItem = pl[i % pl.length];
+        const uclItem = ucl[i % ucl.length];
+        const p = fifaPlayers[i % fifaPlayers.length];
+        const t = transfers[i % transfers.length];
+        const pre = opening[i % opening.length];
+        const post = closings[Math.floor(i / opening.length) % closings.length];
+        const mode = i % 10;
+        const serial = " [Challenge #" + String(i + 1) + "]";
+
+        if (mode === 0) {
+          addQ(pre + ": In " + plItem.season + ", who won the PL title? " + post + serial, plItem.champion, makeOptions(plItem.champion, teams, i + 55), "Champions: " + plItem.champion + " (" + plItem.points + " pts).", "PL Winners");
+        } else if (mode === 1) {
+          addQ(pre + ": " + plItem.season + " Golden Boot winner? " + post + serial, plItem.goldenBoot, makeOptions(plItem.goldenBoot, players, i + 57), "Golden Boot goals that season: " + plItem.goldenBootGoals + ".", "PL Scorers");
+        } else if (mode === 2) {
+          addQ(pre + ": UCL winner in " + uclItem.season + "? " + post + serial, uclItem.winner, makeOptions(uclItem.winner, teams, i + 61), "UCL season " + uclItem.season + " winner: " + uclItem.winner + ".", "Champions League");
+        } else if (mode === 3) {
+          addQ(pre + ": nation " + p.nation + ", position " + p.position + ", club " + p.club + ". " + post + serial, p.name, makeOptions(p.name, players, i + 67), "Profile matched: " + p.name + ".", "FIFA Players");
+        } else if (mode === 4) {
+          addQ(pre + ": " + p.name + " plays which position? " + post + serial, p.position, makeOptions(p.position, positions, i + 71), p.name + " is listed as " + p.position + ".", "FIFA Positions");
+        } else if (mode === 5) {
+          addQ(pre + ": " + p.name + " represents which nation? " + post + serial, p.nation, makeOptions(p.nation, playerNations, i + 73), p.name + " is an international for " + p.nation + ".", "National Teams");
+        } else if (mode === 6) {
+          addQ(pre + ": " + t.player + " transferred to which club? " + post + serial, t.to, makeOptions(t.to, teams, i + 79), "Transfer route: " + t.from + " to " + t.to + ".", "Transfers");
+        } else if (mode === 7) {
+          addQ(pre + ": who finished runner-up in " + plItem.season + "? " + post + serial, plItem.runner, makeOptions(plItem.runner, teams, i + 83), "Title that season: " + plItem.champion + ".", "PL Positions");
+        } else if (mode === 8) {
+          addQ(pre + ": what was the UCL final score in " + uclItem.season + "? " + post + serial, uclItem.finalScore, makeOptions(uclItem.finalScore, ["1-0", "2-0", "2-1", "3-1", "3-0"], i + 87), "Winner: " + uclItem.winner + ", runner-up: " + uclItem.runner + ".", "Champions League Finals");
+        } else {
+          addQ(pre + ": in " + plItem.season + ", title margin (champion points minus runner-up points)? " + post + serial, plItem.points - plItem.runnerPoints, makeOptions(String(plItem.points - plItem.runnerPoints), ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "18"], i + 89), "Margin: " + (plItem.points - plItem.runnerPoints) + " point(s).", "PL Elite Gaps");
+        }
+        i += 1;
+        safety += 1;
+      }
+
+      return quiz;
+    }
+
+    function buildGeographyQuizBank() {
+      const countries = [
+        { country: "France", capital: "Paris", continent: "Europe", iso2: "fr" },
+        { country: "Germany", capital: "Berlin", continent: "Europe", iso2: "de" },
+        { country: "Italy", capital: "Rome", continent: "Europe", iso2: "it" },
+        { country: "Spain", capital: "Madrid", continent: "Europe", iso2: "es" },
+        { country: "Portugal", capital: "Lisbon", continent: "Europe", iso2: "pt" },
+        { country: "United Kingdom", capital: "London", continent: "Europe", iso2: "gb" },
+        { country: "Netherlands", capital: "Amsterdam", continent: "Europe", iso2: "nl" },
+        { country: "Belgium", capital: "Brussels", continent: "Europe", iso2: "be" },
+        { country: "Morocco", capital: "Rabat", continent: "Africa", iso2: "ma" },
+        { country: "Egypt", capital: "Cairo", continent: "Africa", iso2: "eg" },
+        { country: "Nigeria", capital: "Abuja", continent: "Africa", iso2: "ng" },
+        { country: "Kenya", capital: "Nairobi", continent: "Africa", iso2: "ke" },
+        { country: "South Africa", capital: "Pretoria", continent: "Africa", iso2: "za" },
+        { country: "Saudi Arabia", capital: "Riyadh", continent: "Asia", iso2: "sa" },
+        { country: "United Arab Emirates", capital: "Abu Dhabi", continent: "Asia", iso2: "ae" },
+        { country: "Qatar", capital: "Doha", continent: "Asia", iso2: "qa" },
+        { country: "India", capital: "New Delhi", continent: "Asia", iso2: "in" },
+        { country: "Pakistan", capital: "Islamabad", continent: "Asia", iso2: "pk" },
+        { country: "China", capital: "Beijing", continent: "Asia", iso2: "cn" },
+        { country: "Japan", capital: "Tokyo", continent: "Asia", iso2: "jp" },
+        { country: "South Korea", capital: "Seoul", continent: "Asia", iso2: "kr" },
+        { country: "Australia", capital: "Canberra", continent: "Oceania", iso2: "au" },
+        { country: "New Zealand", capital: "Wellington", continent: "Oceania", iso2: "nz" },
+        { country: "United States", capital: "Washington, D.C.", continent: "North America", iso2: "us" },
+        { country: "Canada", capital: "Ottawa", continent: "North America", iso2: "ca" },
+        { country: "Mexico", capital: "Mexico City", continent: "North America", iso2: "mx" },
+        { country: "Brazil", capital: "Brasilia", continent: "South America", iso2: "br" },
+        { country: "Argentina", capital: "Buenos Aires", continent: "South America", iso2: "ar" },
+        { country: "Chile", capital: "Santiago", continent: "South America", iso2: "cl" }
+      ];
+
+      const cityPairs = [
+        { city: "Istanbul", country: "Turkey" }, { city: "Athens", country: "Greece" }, { city: "Dubai", country: "United Arab Emirates" },
+        { city: "Lagos", country: "Nigeria" }, { city: "Marrakesh", country: "Morocco" }, { city: "Karachi", country: "Pakistan" },
+        { city: "Mumbai", country: "India" }, { city: "Sydney", country: "Australia" }, { city: "Auckland", country: "New Zealand" },
+        { city: "Toronto", country: "Canada" }, { city: "Los Angeles", country: "United States" }, { city: "Rio de Janeiro", country: "Brazil" }
+      ];
+
+      const continents = uniqBy(countries.map((c) => c.continent), (x) => x);
+      const countryPool = countries.map((c) => c.country);
+      const capitalPool = countries.map((c) => c.capital);
+
+      const out = [];
+      const used = new Set();
+      let idx = 1;
+      function addQ(q, correct, options, fact, category, extra) {
+        const key = q + "|" + String(correct);
+        if (used.has(key)) {
+          return;
+        }
+        used.add(key);
+        out.push({ id: "g-" + idx, q: q, correct: String(correct), options: options.map((x) => String(x)), fact: fact, category: category, ...extra });
+        idx += 1;
+      }
+
+      function flagUrlFor(iso2) {
+        return "https://flagcdn.com/w320/" + String(iso2).toLowerCase() + ".png";
+      }
+
+      countries.forEach((c, i) => {
+        addQ("What is the capital of " + c.country + "?", c.capital, makeOptions(c.capital, capitalPool, i + 1), c.country + " is in " + c.continent + ".", "Capitals");
+        addQ(c.capital + " is the capital of which country?", c.country, makeOptions(c.country, countryPool, i + 4), "Flag shown for visual memory.", "Countries", { flagUrl: flagUrlFor(c.iso2), flagCountry: c.country });
+        addQ("" + c.country + " belongs to which continent?", c.continent, makeOptions(c.continent, continents, i + 7), "Capital city: " + c.capital + ".", "Continents");
+        addQ("Which country matches this flag?", c.country, makeOptions(c.country, countryPool, i + 10), "Capital: " + c.capital + ".", "Flags", { flagUrl: flagUrlFor(c.iso2), flagCountry: c.country });
+      });
+
+      cityPairs.forEach((p, i) => {
+        addQ(p.city + " is in which country?", p.country, makeOptions(p.country, countryPool.concat(cityPairs.map((x) => x.country)), i + 13), p.city + " is a major city in " + p.country + ".", "Cities");
+      });
+
+      const pre = ["World map check", "Geo sprint", "Atlas challenge", "Capital drill", "Flag clue", "City-country link", "Globe mode", "Geography IQ", "Rapid map round", "Travel knowledge"];
+      const post = ["pick the answer.", "which is correct?", "lock this in.", "stay sharp.", "choose wisely.", "name it.", "show your map skills.", "quick answer.", "one for the atlas.", "world quiz time."];
+      let i = 0;
+      while (out.length < 1800) {
+        const c = countries[i % countries.length];
+        const p = cityPairs[i % cityPairs.length];
+        const a = pre[i % pre.length];
+        const b = post[Math.floor(i / pre.length) % post.length];
+        const mode = i % 5;
+        if (mode === 0) {
+          addQ(a + ": capital of " + c.country + " - " + b, c.capital, makeOptions(c.capital, capitalPool, i + 17), c.country + " sits in " + c.continent + ".", "Capitals");
+        } else if (mode === 1) {
+          addQ(a + ": country for " + c.capital + " - " + b, c.country, makeOptions(c.country, countryPool, i + 19), "Flag shown for visual memory.", "Countries", { flagUrl: flagUrlFor(c.iso2), flagCountry: c.country });
+        } else if (mode === 2) {
+          addQ(a + ": " + c.country + " is in which continent? " + b, c.continent, makeOptions(c.continent, continents, i + 23), "Capital: " + c.capital + ".", "Continents");
+        } else if (mode === 3) {
+          addQ(a + ": identify the country from this flag image. " + b, c.country, makeOptions(c.country, countryPool, i + 29), "Capital: " + c.capital + ".", "Flags", { flagUrl: flagUrlFor(c.iso2), flagCountry: c.country });
+        } else {
+          addQ(a + ": " + p.city + " belongs to which country? " + b, p.country, makeOptions(p.country, countryPool, i + 31), "City-country pair: " + p.city + " - " + p.country + ".", "Cities");
+        }
+        i += 1;
+      }
+      return out;
+    }
+
+    function pickQuestion(bank, sectionState) {
+      if (!bank.length) {
+        return null;
+      }
+      const maxTry = 60;
+      let candidate = null;
+      for (let i = 0; i < maxTry; i += 1) {
+        const q = bank[Math.floor(Math.random() * bank.length)];
+        if (q.id !== sectionState.lastQuestionId) {
+          candidate = q;
+          break;
+        }
+      }
+      if (!candidate) {
+        candidate = bank[Math.floor(Math.random() * bank.length)];
+      }
+      sectionState.lastQuestionId = candidate.id;
+      saveState();
+      return candidate;
+    }
+
+    function pickQuizQuestion() {
+      return pickQuestion(footballQuizBank, state.quiz);
+    }
+
+    function pickGeoQuestion() {
+      return pickQuestion(geoQuizBank, state.geo);
+    }
+
+    function renderQuiz(question) {
+      const qEl = document.getElementById("quizQuestion");
+      const optionsEl = document.getElementById("quizOptions");
+      const resultEl = document.getElementById("quizResult");
+      const factEl = document.getElementById("quizFact");
+      const countEl = document.getElementById("quizCountInfo");
+      if (!question) {
+        qEl.textContent = "Could not load quiz.";
+        return;
+      }
+      resultEl.textContent = "";
+      factEl.textContent = "Answer to unlock a stat insight.";
+      qEl.textContent = question.q;
+      optionsEl.innerHTML = "";
+      question.options.forEach((option) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn";
+        btn.textContent = option;
+        btn.addEventListener("click", () => {
+          const correct = option === question.correct;
+          state.quiz.answered += 1;
+          if (correct) {
+            state.quiz.correct += 1;
+            state.quiz.streak += 1;
+            state.quiz.bestStreak = Math.max(state.quiz.bestStreak, state.quiz.streak);
+            resultEl.style.color = "#2e8b57";
+            resultEl.textContent = "Correct. [" + question.category + "]";
+          } else {
+            state.quiz.streak = 0;
+            resultEl.style.color = "#c0392b";
+            resultEl.textContent = "Not this time. Correct answer: " + question.correct + " [" + question.category + "]";
+          }
+          factEl.textContent = question.fact || "Keep building football knowledge.";
+          saveState();
+          updateQuizStats();
+          Array.from(optionsEl.querySelectorAll("button")).forEach((b) => { b.disabled = true; });
+        });
+        optionsEl.appendChild(btn);
+      });
+      countEl.textContent = "Question bank: " + footballQuizBank.length + " in-depth football questions (PL, UCL, FIFA-style player clues).";
+      updateQuizStats();
+    }
+
+    function renderGeoQuiz(question) {
+      const qEl = document.getElementById("geoQuestion");
+      const optionsEl = document.getElementById("geoOptions");
+      const resultEl = document.getElementById("geoResult");
+      const factEl = document.getElementById("geoFact");
+      const countEl = document.getElementById("geoCountInfo");
+      const flagWrap = document.getElementById("geoFlagWrap");
+      const flagImage = document.getElementById("geoFlagImage");
+      if (!question) {
+        qEl.textContent = "Could not load geography question.";
+        return;
+      }
+
+      if (question.flagUrl) {
+        flagImage.src = question.flagUrl;
+        flagImage.alt = "Flag of " + (question.flagCountry || "country");
+        flagImage.onerror = () => {
+          flagWrap.hidden = true;
+        };
+        flagWrap.hidden = false;
+      } else {
+        flagImage.removeAttribute("src");
+        flagImage.alt = "Country flag";
+        flagImage.onerror = null;
+        flagWrap.hidden = true;
+      }
+
+      resultEl.textContent = "";
+      factEl.textContent = "Answer to unlock a world fact.";
+      qEl.textContent = question.q;
+      optionsEl.innerHTML = "";
+      question.options.forEach((option) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn";
+        btn.textContent = option;
+        btn.addEventListener("click", () => {
+          const correct = option === question.correct;
+          state.geo.answered += 1;
+          if (correct) {
+            state.geo.correct += 1;
+            state.geo.streak += 1;
+            state.geo.bestStreak = Math.max(state.geo.bestStreak, state.geo.streak);
+            resultEl.style.color = "#2e8b57";
+            resultEl.textContent = "Correct. [" + question.category + "]";
+          } else {
+            state.geo.streak = 0;
+            resultEl.style.color = "#c0392b";
+            resultEl.textContent = "Not this time. Correct answer: " + question.correct + " [" + question.category + "]";
+          }
+          factEl.textContent = question.fact || "Geography detail unlocked.";
+          saveState();
+          updateGeoStats();
+          Array.from(optionsEl.querySelectorAll("button")).forEach((b) => { b.disabled = true; });
+        });
+        optionsEl.appendChild(btn);
+      });
+      countEl.textContent = "Question bank: " + geoQuizBank.length + " geography questions (countries, capitals, real flag images, continents, cities).";
+      updateGeoStats();
+    }
+
+    function updateQuizStats() {
+      const answered = state.quiz.answered || 0;
+      const correct = state.quiz.correct || 0;
+      const streak = state.quiz.streak || 0;
+      const bestStreak = state.quiz.bestStreak || 0;
+      const pct = answered ? Math.round((correct / answered) * 100) : 0;
+      document.getElementById("quizStats").textContent = "Score: " + correct + "/" + answered + " (" + pct + "%) | Streak: " + streak + " | Best streak: " + bestStreak;
+    }
+
+    function updateGeoStats() {
+      const answered = state.geo.answered || 0;
+      const correct = state.geo.correct || 0;
+      const streak = state.geo.streak || 0;
+      const bestStreak = state.geo.bestStreak || 0;
+      const pct = answered ? Math.round((correct / answered) * 100) : 0;
+      document.getElementById("geoStats").textContent = "Score: " + correct + "/" + answered + " (" + pct + "%) | Streak: " + streak + " | Best streak: " + bestStreak;
+    }
+
+    function latestScore(topicId) {
+      const attempts = getTopicState(topicId).attempts;
+      if (!attempts.length) {
+        return null;
+      }
+      return Number(attempts[attempts.length - 1].score);
+    }
+
+    function groupByModule() {
+      const map = new Map();
+      topics.forEach((t) => {
+        if (!map.has(t.module)) {
+          map.set(t.module, []);
+        }
+        map.get(t.module).push(t);
+      });
+      return map;
+    }
+
+    function renderModules() {
+      const grid = document.getElementById("moduleGrid");
+      grid.innerHTML = "";
+      const grouped = groupByModule();
+      for (const [moduleName, moduleTopics] of grouped.entries()) {
+        const article = document.createElement("article");
+        article.className = "module";
+        const head = document.createElement("div");
+        head.className = "module-head";
+        head.innerHTML = "<h3>" + moduleName + "</h3>";
+        const moduleChartBtn = document.createElement("button");
+        moduleChartBtn.className = "btn";
+        moduleChartBtn.type = "button";
+        moduleChartBtn.textContent = "Module graph";
+        moduleChartBtn.addEventListener("click", () => {
+          openChartModal(moduleName + " - Improvement", collectModuleAttempts(moduleName));
+        });
+        head.appendChild(moduleChartBtn);
+        article.appendChild(head);
+
+        const items = document.createElement("div");
+        items.className = "items";
+        moduleTopics.forEach((topic) => {
+          const topicState = getTopicState(topic.id);
+          const latest = latestScore(topic.id);
+          const item = document.createElement("div");
+          item.className = "item";
+          item.innerHTML = [
+            "<div class=\"title\">" + topic.title + "</div>",
+            "<div class=\"actions\"><a class=\"btn tq\" href=\"" + toOpenUrl(topic.tq) + "\">Open TQ</a><a class=\"btn ms\" href=\"" + toOpenUrl(topic.ms) + "\">Open MS</a></div>",
+            "<div class=\"tracker\">",
+            "<div class=\"mini-head\">Tracker</div>",
+            "<div>Latest score: <strong>" + (latest === null ? "Not yet" : latest + "%") + "</strong></div>",
+            "<div class=\"progress-bar\"><span style=\"width:" + (latest === null ? 0 : latest) + "%\"></span></div>",
+            "<div class=\"row\"><label>Due date<input type=\"date\" class=\"due-input\" value=\"" + (topicState.dueDate || "") + "\" /></label><label>Score (%)<input type=\"number\" class=\"score-input\" min=\"0\" max=\"100\" step=\"1\" placeholder=\"e.g. 77\" /></label></div>",
+            "<div class=\"row\"><label>Attempt date<input type=\"date\" class=\"attempt-date-input\" value=\"" + new Date().toISOString().slice(0, 10) + "\" /></label><label>Attempt note<input type=\"text\" class=\"attempt-note-input\" placeholder=\"Q4 hard, revise vectors\" /></label></div>",
+            "<div class=\"tool-row\"><button class=\"btn add-attempt-btn\" type=\"button\">Add attempt</button><button class=\"btn topic-chart-btn\" type=\"button\">Topic graph</button><button class=\"btn module-chart-btn\" type=\"button\">Module graph</button><button class=\"btn warn reset-topic-btn\" type=\"button\">Reset this topic</button></div>",
+            "<label>Notes<textarea class=\"notes-input\" placeholder=\"Any comments, reminders, weak areas...\">" + (topicState.notes || "") + "</textarea></label>",
+            "<div class=\"attempt-list\"></div>",
+            "</div>"
+          ].join("");
+
+          const tracker = item.querySelector(".tracker");
+          tracker.querySelector(".due-input").addEventListener("change", (e) => {
+            getTopicState(topic.id).dueDate = e.target.value;
+            saveState();
+            refreshSummaryAndChart();
+          });
+          tracker.querySelector(".notes-input").addEventListener("input", (e) => {
+            getTopicState(topic.id).notes = e.target.value;
+            saveState();
+          });
+          tracker.querySelector(".add-attempt-btn").addEventListener("click", () => {
+            const scoreInput = tracker.querySelector(".score-input");
+            const attemptDateInput = tracker.querySelector(".attempt-date-input");
+            const attemptNoteInput = tracker.querySelector(".attempt-note-input");
+            const score = Number(scoreInput.value);
+            if (Number.isNaN(score) || score < 0 || score > 100) {
+              alert("Enter a score between 0 and 100.");
+              return;
+            }
+            const attempts = getTopicState(topic.id).attempts;
+            attempts.push({ date: attemptDateInput.value || new Date().toISOString().slice(0, 10), score: Math.round(score), note: (attemptNoteInput.value || "").trim() });
+            attempts.sort((a, b) => String(a.date).localeCompare(String(b.date)));
+            scoreInput.value = "";
+            attemptNoteInput.value = "";
+            saveState();
+            renderModules();
+            refreshSummaryAndChart();
+          });
+          tracker.querySelector(".reset-topic-btn").addEventListener("click", () => {
+            const ok = confirm("Reset this topic only? This clears due date, notes, and attempts for " + topic.title + ".");
+            if (!ok) {
+              return;
+            }
+            state.topics[topic.id] = { dueDate: "", notes: "", attempts: [] };
+            saveState();
+            renderModules();
+            refreshSummaryAndChart();
+          });
+          tracker.querySelector(".topic-chart-btn").addEventListener("click", () => {
+            openChartModal(topic.title + " - Improvement", getTopicState(topic.id).attempts.map((a) => ({ ...a, label: topic.title })));
+          });
+          tracker.querySelector(".module-chart-btn").addEventListener("click", () => {
+            openChartModal(topic.module + " - Improvement", collectModuleAttempts(topic.module));
+          });
+          renderAttemptList(topic.id, tracker.querySelector(".attempt-list"));
+          items.appendChild(item);
+        });
+        article.appendChild(items);
+        grid.appendChild(article);
+      }
+    }
+
+    function renderAttemptList(topicId, mount) {
+      const attempts = getTopicState(topicId).attempts;
+      mount.innerHTML = "";
+      if (!attempts.length) {
+        const empty = document.createElement("div");
+        empty.className = "help";
+        empty.textContent = "No attempts yet. Add one after you finish this topic.";
+        mount.appendChild(empty);
+        return;
+      }
+      attempts.forEach((attempt, idx) => {
+        const row = document.createElement("div");
+        row.className = "attempt";
+        const note = attempt.note ? " - " + attempt.note : "";
+        row.innerHTML = "<div class=\"attempt-text\"><strong>" + attempt.score + "%</strong> (" + formatDate(attempt.date) + ")" + note + "</div><button type=\"button\" aria-label=\"Delete attempt\">Delete</button>";
+        row.querySelector("button").addEventListener("click", () => {
+          getTopicState(topicId).attempts.splice(idx, 1);
+          saveState();
+          renderModules();
+          refreshSummaryAndChart();
+        });
+        mount.appendChild(row);
+      });
+    }
+
+    function collectModuleAttempts(moduleName) {
+      const bucket = [];
+      topics.filter((t) => t.module === moduleName).forEach((t) => {
+        getTopicState(t.id).attempts.forEach((a) => bucket.push({ ...a, label: t.title }));
+      });
+      bucket.sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      return bucket;
+    }
+
+    function refreshSummaryAndChart() {
+      const topicStates = topics.map((t) => ({ id: t.id, module: t.module, title: t.title, ...getTopicState(t.id) }));
+      const attemptedTopics = topicStates.filter((t) => t.attempts.length > 0);
+      const totalAttempts = topicStates.reduce((acc, t) => acc + t.attempts.length, 0);
+      const latestScores = attemptedTopics.map((t) => Number(t.attempts[t.attempts.length - 1].score));
+      const overall = latestScores.length ? Math.round((latestScores.reduce((a, b) => a + b, 0) / latestScores.length) * 10) / 10 : 0;
+      const nextDue = topicStates.filter((t) => t.dueDate).sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate)))[0];
+      document.getElementById("statTopicsDone").textContent = attemptedTopics.length + " / " + topics.length;
+      document.getElementById("statOverall").textContent = overall + "%";
+      document.getElementById("statAttempts").textContent = String(totalAttempts);
+      document.getElementById("statNextDue").textContent = nextDue ? formatDate(nextDue.dueDate) : "None";
+
+      const allAttempts = [];
+      topicStates.forEach((t) => t.attempts.forEach((a) => allAttempts.push({ ...a, label: t.title })));
+      allAttempts.sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      drawChart(document.getElementById("progressChart"), document.getElementById("chartMeta"), allAttempts, "overall");
+    }
+
+    function drawChart(svg, metaEl, attempts, modeLabel) {
+      svg.innerHTML = "";
+      const w = 900;
+      const h = 240;
+      const padX = 44;
+      const padY = 20;
+      const usableW = w - padX * 2;
+      const usableH = h - padY * 2;
+
+      for (let y = 0; y <= 100; y += 20) {
+        const yy = padY + usableH - (y / 100) * usableH;
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", String(padX));
+        line.setAttribute("x2", String(w - padX));
+        line.setAttribute("y1", String(yy));
+        line.setAttribute("y2", String(yy));
+        line.setAttribute("stroke", "var(--grid-line)");
+        line.setAttribute("stroke-width", "1");
+        svg.appendChild(line);
+      }
+
+      if (!attempts.length) {
+        metaEl.textContent = "No attempts logged yet.";
+        const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", "50%");
+        t.setAttribute("y", "52%");
+        t.setAttribute("text-anchor", "middle");
+        t.setAttribute("fill", "var(--muted)");
+        t.setAttribute("font-size", "16");
+        t.textContent = "No attempts yet";
+        svg.appendChild(t);
+        return;
+      }
+
+      metaEl.textContent = attempts.length + " attempt(s), from " + formatDate(attempts[0].date) + " to " + formatDate(attempts[attempts.length - 1].date) + (modeLabel === "overall" ? "." : " for this selection.");
+
+      const points = attempts.map((a, idx) => {
+        const x = attempts.length === 1 ? padX + usableW / 2 : padX + (idx / (attempts.length - 1)) * usableW;
+        const y = padY + usableH - (Math.max(0, Math.min(100, Number(a.score))) / 100) * usableH;
+        return String(x) + "," + String(y);
+      }).join(" ");
+
+      const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+      polyline.setAttribute("points", points);
+      polyline.setAttribute("fill", "none");
+      polyline.setAttribute("stroke", "#0b4f6c");
+      polyline.setAttribute("stroke-width", "3");
+      polyline.setAttribute("stroke-linecap", "round");
+      polyline.setAttribute("stroke-linejoin", "round");
+      svg.appendChild(polyline);
+
+      attempts.forEach((a, idx) => {
+        const x = attempts.length === 1 ? padX + usableW / 2 : padX + (idx / (attempts.length - 1)) * usableW;
+        const y = padY + usableH - (Math.max(0, Math.min(100, Number(a.score))) / 100) * usableH;
+        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        c.setAttribute("cx", String(x));
+        c.setAttribute("cy", String(y));
+        c.setAttribute("r", "4");
+        c.setAttribute("fill", "#f4cf5b");
+        c.setAttribute("stroke", "#0b4f6c");
+        c.setAttribute("stroke-width", "1.5");
+        const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+        title.textContent = a.score + "% on " + formatDate(a.date) + (a.label ? " (" + a.label + ")" : "");
+        c.appendChild(title);
+        svg.appendChild(c);
+      });
+    }
+
+    function openChartModal(title, attempts) {
+      document.getElementById("chartModalTitle").textContent = title;
+      drawChart(document.getElementById("chartModalSvg"), document.getElementById("chartModalMeta"), attempts, "detail");
+      document.getElementById("chartModal").hidden = false;
+    }
+
+    function closeChartModal() {
+      document.getElementById("chartModal").hidden = true;
+    }
+
+    function applyTheme(themeName) {
+      const normalized = themeName === "dark" ? "dark" : "light";
+      document.body.setAttribute("data-theme", normalized);
+      state.settings.theme = normalized;
+      document.getElementById("themeToggleBtn").textContent = normalized === "dark" ? "Switch to light theme" : "Switch to dark theme";
+      saveState();
+    }
+
+    function applyHeroCollapsed(collapsed) {
+      const hero = document.querySelector(".hero");
+      hero.classList.toggle("collapsed", !!collapsed);
+      state.settings.heroCollapsed = !!collapsed;
+      document.getElementById("toggleHeroBtn").textContent = collapsed ? "Expand top bar" : "Collapse top bar";
+      saveState();
+    }
+
+    function showEncouragement(step) {
+      const size = encouragementBank.length;
+      if (!size) {
+        return;
+      }
+      if (typeof step === "number") {
+        state.settings.encouragementIndex = (state.settings.encouragementIndex + step + size) % size;
+      }
+      document.getElementById("encouragementText").textContent = encouragementBank[state.settings.encouragementIndex % size];
+      saveState();
+    }
+
+    function showMystery(step) {
+      const size = mysteryStories.length;
+      if (typeof step === "number") {
+        state.settings.mysteryIndex = (state.settings.mysteryIndex + step + size) % size;
+      }
+      const selected = mysteryStories[state.settings.mysteryIndex % size];
+      document.getElementById("mysteryTitle").textContent = selected.title;
+      document.getElementById("mysteryText").textContent = selected.details;
+      saveState();
+    }
+
+    function handleExport() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ocr-as-physics-progress.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function handleImport(file) {
+      if (!file) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          state = mergeState(defaultState(), JSON.parse(String(reader.result || "{}")));
+          if (state.quiz.version !== FOOTBALL_QUIZ_VERSION) {
+            state.quiz = { answered: 0, correct: 0, streak: 0, bestStreak: 0, lastQuestionId: null, version: FOOTBALL_QUIZ_VERSION };
+          }
+          saveState();
+          applyTheme(state.settings.theme);
+          applyHeroCollapsed(state.settings.heroCollapsed);
+          renderModules();
+          refreshSummaryAndChart();
+          showEncouragement(0);
+          showMystery(0);
+          renderQuiz(pickQuizQuestion());
+          renderGeoQuiz(pickGeoQuestion());
+          alert("Progress imported successfully.");
+        } catch (err) {
+          alert("Could not import that file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetFootballQuiz() {
+      const ok = confirm("Reset football quiz score, streak, and recent question history?");
+      if (!ok) {
+        return;
+      }
+      state.quiz = { answered: 0, correct: 0, streak: 0, bestStreak: 0, lastQuestionId: null, version: FOOTBALL_QUIZ_VERSION };
+      saveState();
+      renderQuiz(pickQuizQuestion());
+    }
+
+    function resetAll() {
+      const ok = confirm("Reset all progress, notes, due dates, quiz stats, and saved preferences? This cannot be undone.");
+      if (!ok) {
+        return;
+      }
+      state = defaultState();
+      saveState();
+      applyTheme(state.settings.theme);
+      applyHeroCollapsed(false);
+      renderModules();
+      refreshSummaryAndChart();
+      showEncouragement(0);
+      showMystery(0);
+      renderQuiz(pickQuizQuestion());
+      renderGeoQuiz(pickGeoQuestion());
+    }
+
+    document.getElementById("toggleHeroBtn").addEventListener("click", () => {
+      applyHeroCollapsed(!document.querySelector(".hero").classList.contains("collapsed"));
+    });
+
+    document.getElementById("themeToggleBtn").addEventListener("click", () => {
+      const now = document.body.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      applyTheme(now === "dark" ? "light" : "dark");
+    });
+
+    document.getElementById("exportBtn").addEventListener("click", handleExport);
+    document.getElementById("importFile").addEventListener("change", (evt) => {
+      handleImport(evt.target.files && evt.target.files[0]);
+      evt.target.value = "";
+    });
+
+    document.getElementById("exportTopicsBtn").addEventListener("click", handleExportTopicsTemplate);
+    document.getElementById("importTopicsFile").addEventListener("change", (evt) => {
+      handleImportTopicsFile(evt.target.files && evt.target.files[0]);
+      evt.target.value = "";
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", resetAll);
+    document.getElementById("nextEncouragementBtn").addEventListener("click", () => showEncouragement(1));
+    document.getElementById("nextMysteryBtn").addEventListener("click", () => showMystery(1));
+    document.getElementById("nextQuizBtn").addEventListener("click", () => renderQuiz(pickQuizQuestion()));
+    document.getElementById("resetQuizBtn").addEventListener("click", resetFootballQuiz);
+    document.getElementById("nextGeoBtn").addEventListener("click", () => renderGeoQuiz(pickGeoQuestion()));
+
+    document.getElementById("closeChartModalBtn").addEventListener("click", closeChartModal);
+    document.getElementById("chartModal").addEventListener("click", (evt) => {
+      if (evt.target.id === "chartModal") {
+        closeChartModal();
+      }
+    });
+
+    if (state.quiz.version !== FOOTBALL_QUIZ_VERSION) {
+      state.quiz = { answered: 0, correct: 0, streak: 0, bestStreak: 0, lastQuestionId: null, version: FOOTBALL_QUIZ_VERSION };
+      saveState();
+    }
+
+    const jsBlockedNotice = document.getElementById("jsBlockedNotice");
+    if (jsBlockedNotice) {
+      jsBlockedNotice.style.display = "none";
+    }
+
+    async function initializeApp() {
+      await loadTopicsData();
+      applyTheme(state.settings.theme || "light");
+      applyHeroCollapsed(!!state.settings.heroCollapsed);
+      renderModules();
+      refreshSummaryAndChart();
+      showEncouragement(0);
+      showMystery(0);
+      renderQuiz(pickQuizQuestion());
+      renderGeoQuiz(pickGeoQuestion());
+    }
+
+    initializeApp();
+  </script>
+</body>
+</html>
