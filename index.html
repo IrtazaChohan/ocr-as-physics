@@ -617,6 +617,7 @@
       </div>
 
       <div class="top-tools">
+        <a class="btn" href="study-hub.html">Main Study Hub</a>
         <button class="btn" id="themeToggleBtn" type="button">Switch to dark theme</button>
         <button class="btn" id="exportBtn" type="button">Export progress</button>
         <label class="btn" for="importFile">Import progress</label>
@@ -1454,7 +1455,7 @@
           item.className = "item";
           item.innerHTML = [
             "<div class=\"title\">" + topic.title + "</div>",
-            "<div class=\"actions\"><a class=\"btn tq\" href=\"" + toOpenUrl(topic.tq) + "\">Open TQ</a><a class=\"btn ms\" href=\"" + toOpenUrl(topic.ms) + "\">Open MS</a></div>",
+            "<div class=\"actions\"><a class=\"btn tq\" href=\"" + toOpenUrl(topic.tq) + "\" target=\"_blank\" rel=\"noopener\">Open TQ</a><a class=\"btn ms\" href=\"" + toOpenUrl(topic.ms) + "\" target=\"_blank\" rel=\"noopener\">Open MS</a></div>",
             "<div class=\"tracker\">",
             "<div class=\"mini-head\">Tracker</div>",
             "<div>Latest score: <strong>" + (latest === null ? "Not yet" : latest + "%") + "</strong></div>",

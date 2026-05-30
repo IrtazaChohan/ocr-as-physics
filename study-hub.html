@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Hub - OCR AS Physics</title>
+  <style>
+    :root {
+      --bg: #f3f8ff;
+      --panel: #ffffff;
+      --text: #162033;
+      --muted: #5c6d86;
+      --brand: #0d5a70;
+      --brand2: #12795f;
+      --line: #d6e2f2;
+      --chip: #edf5ff;
+      --chipText: #1f466d;
+      --chipLine: #c9d9ef;
+      --radius: 16px;
+      --shadow: 0 12px 28px rgba(16, 32, 57, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 8% 0, rgba(18, 121, 95, 0.2) 0, transparent 30%),
+        radial-gradient(circle at 100% 100%, rgba(13, 90, 112, 0.2) 0, transparent 35%),
+        var(--bg);
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 12px 28px;
+    }
+
+    .hero {
+      background: linear-gradient(130deg, var(--brand), var(--brand2));
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 20px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 1rem + 1.8vw, 2rem);
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    }
+
+    .hero p {
+      margin: 9px 0 0;
+      line-height: 1.5;
+      color: #e5f7ff;
+    }
+
+    .panel {
+      margin-top: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    }
+
+    .meta {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .row {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      text-decoration: none;
+      border: 1px solid var(--chipLine);
+      border-radius: 999px;
+      background: var(--chip);
+      color: var(--chipText);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+    }
+
+    .btn.primary {
+      background: #e5faf3;
+      border-color: #bde9d9;
+      color: #1f5d49;
+    }
+
+    .btn.alt {
+      background: #fff8df;
+      border-color: #ecd797;
+      color: #6d5702;
+    }
+
+    .grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: #ffffff;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .foot {
+      margin-top: 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Study Hub</h1>
+      <p>This is the GitHub Pages entry page for the OCR AS Physics site. Use this as your first stop, then open the tracker or PDF resources.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Start Here</h2>
+      <div class="meta">Open the tracker dashboard or topic PDF folders.</div>
+      <div class="row">
+        <a class="btn primary" href="./index.html">OCR AS Physics Tracker</a>
+        <a class="btn" href="./Topic%20Questions/">Topic Questions Folder</a>
+        <a class="btn" href="./Past%20Papers/">Past Papers Folder</a>
+        <a class="btn" href="./Practice%20Papers/">Practice Papers Folder</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>About The New Full Hub</h2>
+      <div class="meta">The full A-Level + AS-Level cross-subject hub is ready locally and can be published once all subject folders are added to one GitHub Pages repo.</div>
+      <div class="grid">
+        <article class="card">
+          <h3>Current Live Scope</h3>
+          <p>This GitHub Pages repo currently hosts OCR AS Physics resources.</p>
+        </article>
+        <article class="card">
+          <h3>Next Publish Step</h3>
+          <p>Upload all A-Level and AS-Level folders into a single web repo, then use one homepage for all subjects.</p>
+        </article>
+        <article class="card">
+          <h3>iPad OneNote Flow</h3>
+          <p>PDF links open normally so Share can send to OneNote or OneDrive.</p>
+        </article>
+      </div>
+      <div class="row">
+        <a class="btn alt" href="https://irtazachohan.github.io/ocr-as-physics/" target="_blank" rel="noopener">Current MVP URL</a>
+      </div>
+    </section>
+
+    <p class="foot">If you want, I can next publish the full all-subject hub to its own GitHub Pages repo.</p>
+  </main>
+</body>
+</html>
